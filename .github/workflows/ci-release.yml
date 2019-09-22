@@ -14,4 +14,4 @@ jobs:
       with:
         dotnet-version: 3.0.100-rc1-014190
     - name: Build with dotnet
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Debug
