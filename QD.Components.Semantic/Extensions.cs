@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -6,12 +7,17 @@ namespace QD.Components.Semantic
 {
 	internal static class Extensions
 	{
-		internal static string GetDescription(this Enum @object)
+		private static readonly ConcurrentDictionary<Enum, string> s_descriptions = new ConcurrentDictionary<Enum, string>();
+
+		internal static string GetDescription(this Enum @enum)
 		{
-			FieldInfo fieldInfo = @object.GetType().GetField(@object.ToString());
-			if (fieldInfo == null) return null;
-			DescriptionAttribute description = fieldInfo.GetCustomAttribute(typeof(DescriptionAttribute)) as DescriptionAttribute;
-			return description?.Description;
+			return s_descriptions.GetOrAdd(@enum, ReflectDescription);
+		}
+
+		private static string ReflectDescription(Enum @enum)
+		{
+			FieldInfo fieldInfo = @enum.GetType().GetField(@enum.ToString());
+			return fieldInfo?.GetCustomAttribute<DescriptionAttribute>()?.Description;
 		}
 	}
 }
