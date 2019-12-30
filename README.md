@@ -79,7 +79,7 @@ dotnet add package QD.Components.Semantic
 
 # Features
 ## Elements
-- [ ] Button
+- [X] Button
 - [X] Container
 - [X] Divider
 - [X] Flag
